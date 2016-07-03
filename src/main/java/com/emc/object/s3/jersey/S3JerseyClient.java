@@ -197,6 +197,9 @@ public class S3JerseyClient extends AbstractJerseyClient implements S3Client {
             }
         }
 
+        client.setReadTimeout(s3Config.getSocketTimeout());
+        client.setConnectTimeout(s3Config.getConnectionTimeout());
+
         // jersey filters
         client.addFilter(new ErrorFilter());
         if (s3Config.getFaultInjectionRate() > 0.0f)

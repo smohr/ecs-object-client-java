@@ -64,6 +64,8 @@ public class S3Config extends ObjectConfig<S3Config> {
     public static final int DEFAULT_INITIAL_RETRY_DELAY = 1000; // ms
     public static final int DEFAULT_RETRY_LIMIT = 3;
     public static final int DEFAULT_RETRY_BUFFER_SIZE = 2 * 1024 * 1024;
+    public static final int DEFAULT_SOCKET_TIMEOUT = 0;
+    public static final int DEFAULT_CONNECTION_TIMEOUT = 0;
 
     protected static int defaultPort(Protocol protocol) {
         if (protocol == Protocol.HTTP) return DEFAULT_HTTP_PORT;
@@ -79,6 +81,8 @@ public class S3Config extends ObjectConfig<S3Config> {
     protected int initialRetryDelay = DEFAULT_INITIAL_RETRY_DELAY;
     protected int retryLimit = DEFAULT_RETRY_LIMIT;
     protected int retryBufferSize = DEFAULT_RETRY_BUFFER_SIZE;
+    protected int socketTimeout = DEFAULT_SOCKET_TIMEOUT;
+    protected int connectionTimeout = DEFAULT_CONNECTION_TIMEOUT;
     protected float faultInjectionRate = 0.0f;
 
     /**
@@ -117,6 +121,8 @@ public class S3Config extends ObjectConfig<S3Config> {
         this.initialRetryDelay = other.initialRetryDelay;
         this.retryLimit = other.retryLimit;
         this.retryBufferSize = other.retryBufferSize;
+        this.socketTimeout = other.socketTimeout;
+        this.connectionTimeout = other.connectionTimeout;
         this.faultInjectionRate = other.faultInjectionRate;
     }
 
@@ -201,6 +207,22 @@ public class S3Config extends ObjectConfig<S3Config> {
         this.retryBufferSize = retryBufferSize;
     }
 
+    public int getSocketTimeout() {
+      return socketTimeout;
+    }
+
+    public void setSocketTimeout(int socketTimeout) {
+      this.socketTimeout = socketTimeout;
+    }
+
+    public int getConnectionTimeout() {
+      return connectionTimeout;
+    }
+
+    public void setConnectionTimeout(int connectionTimeout) {
+      this.connectionTimeout = connectionTimeout;
+    }
+
     public float getFaultInjectionRate() {
         return faultInjectionRate;
     }
@@ -248,6 +270,16 @@ public class S3Config extends ObjectConfig<S3Config> {
     public S3Config withRetryBufferSize(int retryBufferSize) {
         setRetryBufferSize(retryBufferSize);
         return this;
+    }
+
+    public S3Config withSocketTimeout(int socketTimeout) {
+      setSocketTimeout(socketTimeout);
+      return this;
+    }
+
+    public S3Config withConnectionTimeout(int connectionTimeout) {
+      setConnectionTimeout(connectionTimeout);
+      return this;
     }
 
     public S3Config withFaultInjectionRate(float faultInjectionRate) {
