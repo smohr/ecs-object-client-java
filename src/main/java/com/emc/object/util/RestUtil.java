@@ -26,8 +26,6 @@
  */
 package com.emc.object.util;
 
-import sun.nio.cs.ThreadLocalCoders;
-
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -36,6 +34,8 @@ import java.net.URLEncoder;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.CharacterCodingException;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetEncoder;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -92,6 +92,11 @@ public final class RestUtil {
 
     private static final String HEADER_FORMAT = "EEE, d MMM yyyy HH:mm:ss z";
     private static final ThreadLocal<DateFormat> headerFormat = new ThreadLocal<DateFormat>();
+    private static final ThreadLocal<CharsetEncoder> charsetEncoder = new ThreadLocal<CharsetEncoder>();
+
+    static {
+      charsetEncoder.set(Charset.forName("UTF-8").newEncoder());
+    }
 
     public static <T> String getFirstAsString(Map<String, List<T>> multiValueMap, String key) {
         return getFirstAsString(multiValueMap, key, false);
@@ -352,8 +357,7 @@ public final class RestUtil {
 
         ByteBuffer bb = null;
         try {
-            bb = ThreadLocalCoders.encoderFor("UTF-8")
-                    .encode(CharBuffer.wrap(s));
+            bb = charsetEncoder.get().encode(CharBuffer.wrap(s));
         } catch (CharacterCodingException x) {
             assert false;
         }
